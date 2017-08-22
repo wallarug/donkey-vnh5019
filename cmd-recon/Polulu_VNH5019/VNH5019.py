@@ -22,6 +22,8 @@
 
 import time
 
+        
+
 
 class VNH5019(object):
     """ Polulu VNH5019 Motor Controller. """
@@ -68,7 +70,6 @@ class VNH5019(object):
     def run(self, command):
         if not self.MC:
             return
-
         if (command == DualVNH5019MotorShield.FORWARD):
             self.MC.setPin(self.IN2pin, 0)
             self.MC.setPin(self.IN1pin, 1)
@@ -101,12 +102,21 @@ class DualVNH5019MotorShield:
 
     def __init__(self):
         self.motors = [ VNH5019(self, m) for m in range(2) ]
-        self._pwm = 0
+
+        # GPIO setup for Raspberry Pi
+        for motor in self.motors:
+            GPIO.setup(motor.IN1pin, GPIO.OUT)
+            GPIO.setup(motor.IN2pin, GPIO.OUT)
+            GPIO.setup(motor.ENpin, GPIO.OUT)
+            GPIO.setup(motor.PWMpin, GPIO.OUT)
 
     def setPin(self, pin, value):
         if (pin < 0) or (pin > 22):
             raise NameError('Pin must be between 0 and 22 inclusive')
         if (value != 0) and (value != 1):
             raise NameError('Pin value must be 0 or 1!')
-        if (value == 0):
-            self._pwm
+
+        GPIO.output(pin, value)
+
+    def setPWM(self, pin, value):
+        GPIO.
