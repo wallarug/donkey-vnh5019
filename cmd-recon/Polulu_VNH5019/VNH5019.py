@@ -39,8 +39,8 @@ class VNH5019(object):
     """ Polulu VNH5019 Motor Controller. """
 
     def __init__(self, ina, inb, enable, ctrl,
-                 enable_pwm=enable_pwm
-                 gpio=GPIO.get_platform_gpio()
+                 enable_pwm=enable_pwm,
+                 gpio=GPIO.get_platform_gpio(),
                  pwm=PWM.get_platform_pwm() ):
         # Save GPIO state and pin numbers
         self._en = enable
@@ -123,18 +123,33 @@ class DualVNH5019MotorShield(object):
     BRAKE = 3
     RELEASE = 4
 
-    def __init__(self):
+    def __init__(self,
+                 m1ina=VNH_SHIELD_M1INA,
+                 m1inb=VNH_SHIELD_M1INB,
+                 m1en=VNH_SHIELD_M1EN,
+                 m1pwm=VNH_SHIELD_M1PWM,
+                 m2ina=VNH_SHIELD_M2INA,
+                 m2inb=VNH_SHIELD_M2INB,
+                 m2en=VNH_SHIELD_M2EN,
+                 m2pwm=VNH_SHIELD_M2PWM,
+                 pwm_enabled=True,
+                 gpio=GPIO.get_platform_gpio(),
+                 pwm=PWM.get_platform_pwm()):
         # Initialise Motors
-        self._M1 = VNH5019(VNH_SHIELD_M1INA,
-                           VNH_SHIELD_M1INB,
-                           VNH_SHIELD_M1EN,
-                           VNH_SHIELD_M1PWM,
-                           enabled_pwm=True)
-        self._M2 = VNH5019(VNH_SHIELD_M2INA,
-                           VNH_SHIELD_M2INB,
-                           VNH_SHIELD_M2EN,
-                           VNH_SHIELD_M2PWM,
-                           enabled_pwm=True)
+        self._M1 = VNH5019(m1ina,
+                           m1inb,
+                           m1en,
+                           m1pwm,
+                           enabled_pwm=pwm_enabled,
+                           gpio=gpio,
+                           pwm=pwm)
+        self._M2 = VNH5019(m2ina,
+                           m2inb,
+                           m2en,
+                           m2pwm,
+                           enabled_pwm=pwm_enabled,
+                           gpio=gpio,
+                           pwm=pwm)
         # Initialise Motors
         setBrakes(0)
         
