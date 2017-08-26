@@ -58,20 +58,34 @@ class VNH5019(object):
             gpio.setup(pin, GPIO.OUT)
 
         # Setup the PWM speed control
-        if enable_pwm:
+        if ( enable_pwm ):
             pwm.start(ctrl, 0)
         else:
             gpio.setup(ctrl, GPIO.OUT)
             self._gpio.output(ctrl, False)
 
         # Initialise the motor (stationary)
-        self.setBreak()
+        self.setBrake(0)
 
     ## Stop the motor from spinning
-    def setBreak(self):
+    def setBrake(self, brake):
+        # brake is a number between 0 and 400
+        # normalize brake
+        if ( brake < 0 ):
+            brake = -brake
+
+        if ( brake > 400 ):     # Max brake
+            brake = 400
+        
         # set both in channels to low
         self._gpio.output(self._ina, False)
         self._gpio.output(self._inb, False)
+
+        if ( self._enabled_pwm ):
+            self._pwm.set_duty_cycle(self._ctrl, speed / 4)
+        else:
+            self._gpio.output(self._ctrl, False)
+            
 
     ## Set speed for motor, speed is a number between -400 and 400
     def setSpeed(self, speed):
@@ -109,26 +123,46 @@ class DualVNH5019MotorShield(object):
     BRAKE = 3
     RELEASE = 4
 
-    SINGLE = 1
-    DOUBLE = 2
-
     def __init__(self):
-        self.motors = [ VNH5019(self, m) for m in range(2) ]
+        # Initialise Motors
+        self._M1 = VNH5019(VNH_SHIELD_M1INA,
+                           VNH_SHIELD_M1INB,
+                           VNH_SHIELD_M1EN,
+                           VNH_SHIELD_M1PWM,
+                           enabled_pwm=True)
+        self._M2 = VNH5019(VNH_SHIELD_M2INA,
+                           VNH_SHIELD_M2INB,
+                           VNH_SHIELD_M2EN,
+                           VNH_SHIELD_M2PWM,
+                           enabled_pwm=True)
+        # Initialise Motors
+        setBrakes(0)
+        
 
-        # GPIO setup for Raspberry Pi
-        for motor in self.motors:
-            GPIO.setup(motor.IN1pin, GPIO.OUT)
-            GPIO.setup(motor.IN2pin, GPIO.OUT)
-            GPIO.setup(motor.ENpin, GPIO.OUT)
-            GPIO.setup(motor.PWMpin, GPIO.OUT)
+    ###
+    ###  B R A K I N G
+    ###
+    def setM1Brake(brake):
+        self._M1.setBrake(brake)
 
-    def setPin(self, pin, value):
-        if (pin < 0) or (pin > 22):
-            raise NameError('Pin must be between 0 and 22 inclusive')
-        if (value != 0) and (value != 1):
-            raise NameError('Pin value must be 0 or 1!')
+    def setM2Brake(brake):
+        self._M2.setBrake(brake)
 
-        GPIO.output(pin, value)
+    def setBrakes(m1Brake, m2Brake):
+        setM1Brake(m1Brake)
+        setM2Brake(m2Brake)
 
-    def setPWM(self, pin, value):
-        GPIO.
+    ###
+    ###  S P E E D
+    ###
+    def setM1Speed(speed):
+        self._M1.setSpeed(speed)
+
+    def setM2Brake(speed):
+        self._M2.setSpeed(speed)
+
+    def setSpeeds(m1Speed, m2Speed):
+        setM1Speed(m1Speed)
+        setM2Speed(m2Speed)
+
+    
