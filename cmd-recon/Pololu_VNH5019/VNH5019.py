@@ -36,7 +36,7 @@ VNH_SHIELD_M2PWM = 20
 
 
 class VNH5019(object):
-    """ Polulu VNH5019 Motor Controller. """
+    """ Class to represent and interact with a VNH5019 Motor Controller. """
 
     def __init__(self, ina, inb, enable, ctrl,
                  enable_pwm=enable_pwm,
@@ -117,7 +117,10 @@ class VNH5019(object):
         
         
 
-class DualVNH5019MotorShield(object):
+class Pololu_DualVNH5019Shield(object):
+    """ Class to represent and interact with a Pololu Dual VNH5019
+         Motor Driver Shield with a Raspberry Pi """
+    
     FORWARD = 1
     BACKWARD = 2
     BRAKE = 3
