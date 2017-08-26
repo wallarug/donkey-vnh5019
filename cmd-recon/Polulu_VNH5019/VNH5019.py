@@ -24,77 +24,86 @@ import time
 import Adafruit_GPIO as GPIO
 import Adafruit_GPIO.PWM as PWM
 
-
-        
+# Motor Driver Sheild GPIO Numbers
+VNH_SHIELD_M1INA = 5
+VNH_SHIELD_M1INB = 4        
+VNH_SHIELD_M1EN = 6
+VNH_SHIELD_M2INA = 17
+VNH_SHIELD_M2INB = 18
+VNH_SHIELD_M2EN = 22
+VNH_SHIELD_M1PWM = 19
+VNH_SHIELD_M2PWM = 20
 
 
 class VNH5019(object):
     """ Polulu VNH5019 Motor Controller. """
 
-    def __init__(self, controller, num):
-        self.MC = controller
-        self.motornum = num
-        pwm = en = in1 = in2 = 0
+    def __init__(self, ina, inb, enable, ctrl,
+                 enable_pwm=enable_pwm
+                 gpio=GPIO.get_platform_gpio()
+                 pwm=PWM.get_platform_pwm() ):
+        # Save GPIO state and pin numbers
+        self._en = enable
+        self._ina = ina
+        self._inb = inb
+        self._ctrl = ctrl
 
-        if (num == 0):
-            pwm = 19
-            in2 = 4
-            in1 = 5
-            en = 16
-        elif (num == 1):
-            pwm = 20
-            in2 = 18
-            in1 = 17
-            en = 22
+        # Save libraries
+        self._enable_pwm = enable_pwm
+        self._pwm = pwm
+        self._gpio = gpio
+
+        # Setup all pins as outputs
+        for pin in (ina, inb, enable):
+            gpio.setup(pin, GPIO.OUT)
+
+        # Setup the PWM speed control
+        if enable_pwm:
+            pwm.start(ctrl, 0)
         else:
-            raise NameError('Pololu Motor must be between 1 and 2')
+            gpio.setup(ctrl, GPIO.OUT)
+            self._gpio.output(ctrl, False)
 
-        self.PWMpin = pwm
-        self.IN1pin = in1
-        self.IN2pin = in2
-        self.ENpin = en
-        
-        
+        # Initialise the motor (stationary)
+        self.setBreak()
 
-        import RPi.GPIO as GPIO
-        self._pinA = INA
-        self._pinB = INB
-        self._pinEn = EN
-        self._pinPWM = PWM
-        
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(self._pinEn, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(self._pinA, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(self._pinB, GPIO.OUT, initial=GPIO.LOW)
-        GPIO.setup(PWM, GPIO.OUT)
+    ## Stop the motor from spinning
+    def setBreak(self):
+        # set both in channels to low
+        self._gpio.output(self._ina, False)
+        self._gpio.output(self._inb, False)
 
-        self._pinPWM = GPIO.PWM(PWM, 50)
-
-    def run(self, command):
-        if not self.MC:
-            return
-        if (command == DualVNH5019MotorShield.FORWARD):
-            self.MC.setPin(self.IN2pin, 0)
-            self.MC.setPin(self.IN1pin, 1)
-            self.MC.setPin(self.ENpin, 1)
-        if (command == DualVNH5019MotorShield.BACKWARD):
-            self.MC.setPin(self.IN1pin, 0)
-            self.MC.setPin(self.IN2pin, 1)
-            self.MC.setPin(self.ENpin, 1)
-        if (command == DualVNH5019MotorShield.RELEASE):
-            self.MC.setPin(self.IN1pin, 0)
-            self.MC.setPin(self.IN2pin, 0)
-            self.MC.setPin(self.ENpin, 1)
-
+    ## Set speed for motor, speed is a number between -400 and 400
     def setSpeed(self, speed):
-        if (speed < 0):
-            speed = 0
-        if (speed > 255):
-            speed = 255
-        self.MC._pwm.setPWM(self.PWMpin, 0, speed*16)
+        reverse = False
+        
+        if ( speed < 0 ):
+            speed = -speed  # Make speed a positive quantity
+            reverse = True  # Preserve the direction
+
+        if ( speed > 400 ):
+            speed = 400     # Max PWM duty cycle
+
+        # Set the speed of the motor
+        if (self._enable_pwm):
+            self._pwm.set_duty_cycle(self._ctrl, speed / 4)
+        else:
+            self._gpio.output(self._ctrl, True)
+
+        # Determine direction to spin motors
+        if ( speed == 0 ):
+            self._gpio.output(self._ina, False) # make the motor coast no 
+            self._gpio.output(self._inb, False) # matter which direction it is spinning.
+        elif ( reverse ):
+            self._gpio.output(self._ina, False)
+            self._gpio.output(self._inb, True)
+        else:
+            self._gpio.output(self._ina, True)
+            self._gpio.output(self._inb, False)
+        
         
 
-class DualVNH5019MotorShield:
+class DualVNH5019MotorShield(object):
     FORWARD = 1
     BACKWARD = 2
     BRAKE = 3

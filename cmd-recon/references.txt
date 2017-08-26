@@ -1,1 +1,2 @@
 Adafruit Char LCD: https://github.com/adafruit/Adafruit_Python_CharLCD/blob/master/Adafruit_CharLCD/Adafruit_CharLCD.py
+DuelMotorShield: https://github.com/pololu/dual-vnh5019-motor-shield/blob/master/DualVNH5019MotorShield.cpp
