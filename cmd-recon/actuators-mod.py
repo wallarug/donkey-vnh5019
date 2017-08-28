@@ -12,7 +12,7 @@
 def Pololu_DualVNH5019:
     '''
     Pololu Dual VNH5019 Motor Driver
-    Used for both motors on a differential drive car.
+    Used for both motors on tank track.
     '''
     def __init__(self):
         from Pololu_VNH5019 import Pololu_DualVNH5019Shield
@@ -41,4 +41,58 @@ def Pololu_DualVNH5019:
         self.mh.setBrakes(0)
 
 
+def Tank:
+    '''
+    Pololu Dual VNH5019 Motor Driver
+    Used for both motors on tank track.
+    '''
+    def __init__(self):
+        from Pololu_VNH5019 import Pololu_DualVNH5019Shield
+        import Adafruit_GPIO as GPIO
+        import Adafruit_GPIO.PWM as PWM
 
+        self.mh = Pololu_DualVNH5019Shield(gpio=GPIO, pwm=PWM)
+
+        self.speed = 0
+        self.throttleL = 0
+        self.throttleR = 0
+
+
+    def run(self, steering, throttle):
+        '''
+        Update the speed of the motor where 1 is full forward and
+        -1 is full backwards.
+        '''
+
+        if throttle > 1 or throttle < -1:
+            raise ValueError( "Speed must be between 1(forward) and -1(reverse)")
+
+        if steering > 1 or steering < -1:
+            raise ValueError( "Steering must be between 1 and -1")
+
+        if ( steering > 0 and throttle > 0 ):       # Quadrant 1
+            self.throttleL = self.convert(throttle)
+            self.throttleR = self.convert(throttle-steering)
+
+        elif ( steering < 0 and throttle > 0 ):     # Quadrant 2
+            self.throttleL = self.convert(throttle+steering)
+            self.throttleR = self.convert(throttle)
+
+        elif ( steering > 0 and throttle < 0 ):     # Quadrant 4
+            self.throttleL = self.convert(throttle)
+            self.throttleR = self.convert(throttle+steering)
+
+        elif ( steering < 0 and throttle < 0 ):     # Quadrant 3
+            self.throttleL = self.convert(throttle-steering)
+            self.throttleR = self.convert(throttle)
+        
+        
+        self.mh.setSpeeds(self.throttleL, self.throttleR)
+
+
+    def shutdown(self):
+        self.mh.setBrakes(0)
+
+
+    def convert(self, value):
+        return int(utils.map_range(abs(value), -1, 1, -400, 400))
