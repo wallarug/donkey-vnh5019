@@ -35,7 +35,7 @@ def Pololu_DualVNH5019:
         self.speed = speed
         self.throttle = int(utils.map_range(abs(speed), -1, 1, -400, 400))
 
-        self.mh.setSpeeds(self.throttle)
+        self.mh.setSpeeds(self.throttle, self.throttle)
 
     def shutdown(self):
         self.mh.setBrakes(0)
