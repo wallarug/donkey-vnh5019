@@ -9,7 +9,7 @@
 #
 #
 
-def Pololu_DualVNH5019:
+class Pololu_DualVNH5019:
     '''
     Pololu Dual VNH5019 Motor Driver
     Used for both motors on tank track.
@@ -41,7 +41,7 @@ def Pololu_DualVNH5019:
         self.mh.setBrakes(0)
 
 
-def Tank:
+class Tank:
     '''
     Pololu Dual VNH5019 Motor Driver
     Used for both motors on tank track.
