@@ -140,7 +140,7 @@ class Pololu_DualVNH5019Shield(object):
                  pwm=PWM.get_platform_pwm()):
         # Initialise Motors
         # Left Motor
-        M1 = Pololu_VNH5019(m1ina,
+        self._M1 = Pololu_VNH5019(m1ina,
                            m1inb,
                            m1en,
                            m1pwm,
@@ -148,7 +148,7 @@ class Pololu_DualVNH5019Shield(object):
                            gpio=gpio,
                            pwm=pwm)
         # Right Motor
-        M2 = Pololu_VNH5019(m2ina,
+        self._M2 = Pololu_VNH5019(m2ina,
                            m2inb,
                            m2en,
                            m2pwm,
@@ -157,7 +157,7 @@ class Pololu_DualVNH5019Shield(object):
                            pwm=pwm)
         self.motors = [M1, M2]
         # Initialise Motors
-        setBrakes(0)
+        self.setBrakes(0,0)
         
 
     ###
@@ -170,8 +170,8 @@ class Pololu_DualVNH5019Shield(object):
         self._M2.setBrake(brake)
 
     def setBrakes(self, m1Brake, m2Brake):
-        setM1Brake(m1Brake)
-        setM2Brake(m2Brake)
+        self.setM1Brake(m1Brake)
+        self.setM2Brake(m2Brake)
 
     ###
     ###  S P E E D
@@ -183,8 +183,8 @@ class Pololu_DualVNH5019Shield(object):
         self._M2.setSpeed(speed)
 
     def setSpeeds(self, m1Speed, m2Speed):
-        setM1Speed(m1Speed)
-        setM2Speed(m2Speed)
+        self.setM1Speed(m1Speed)
+        self.setM2Speed(m2Speed)
 
     ###
     ###  O T H E R
