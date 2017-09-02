@@ -155,7 +155,7 @@ class Pololu_DualVNH5019Shield(object):
                            enable_pwm=pwm_enabled,
                            gpio=gpio,
                            pwm=pwm)
-        self.motors = [M1, M2]
+        self.motors = [self._M1, self._M2]
         # Initialise Motors
         self.setBrakes(0,0)
         
