@@ -144,7 +144,7 @@ class Pololu_DualVNH5019Shield(object):
                            m1inb,
                            m1en,
                            m1pwm,
-                           enabled_pwm=pwm_enabled,
+                           enable_pwm=pwm_enabled,
                            gpio=gpio,
                            pwm=pwm)
         # Right Motor
@@ -152,7 +152,7 @@ class Pololu_DualVNH5019Shield(object):
                            m2inb,
                            m2en,
                            m2pwm,
-                           enabled_pwm=pwm_enabled,
+                           enable_pwm=pwm_enabled,
                            gpio=gpio,
                            pwm=pwm)
         self.motors = [M1, M2]
