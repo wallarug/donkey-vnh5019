@@ -81,7 +81,7 @@ class Pololu_VNH5019(object):
         self._gpio.output(self._ina, False)
         self._gpio.output(self._inb, False)
 
-        if ( self._enabled_pwm ):
+        if ( self._enable_pwm ):
             self._pwm.set_duty_cycle(self._ctrl, speed / 4)
         else:
             self._gpio.output(self._ctrl, False)
