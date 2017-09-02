@@ -179,7 +179,7 @@ class Pololu_DualVNH5019Shield(object):
     def setM1Speed(self, speed):
         self._M1.setSpeed(speed)
 
-    def setM2Brake(self, speed):
+    def setM2Speed(self, speed):
         self._M2.setSpeed(speed)
 
     def setSpeeds(self, m1Speed, m2Speed):
