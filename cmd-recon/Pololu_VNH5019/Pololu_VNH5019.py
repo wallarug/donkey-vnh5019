@@ -158,6 +158,7 @@ class Pololu_DualVNH5019Shield(object):
         self.motors = [self._M1, self._M2]
         # Initialise Motors
         self.setBrakes(0,0)
+        self._gpio = gpio
         
 
     ###
@@ -194,3 +195,6 @@ class Pololu_DualVNH5019Shield(object):
             raise NameError('Shield Motor must be between 1 and 2 inclusive')
 
         return self.motors[num-1]
+
+    def cleanup(self):
+        self._gpio.cleanup()
