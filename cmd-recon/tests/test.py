@@ -30,8 +30,11 @@ def testBasic():
     testM1Basic(mh)
     testM2Basic(mh)
 
+    # Clean up GPIO
+    mh.cleanup()
+
     
-    print("Basic testing complete!")
+    print("Basic testing COMPLETE!")
 
 def testCoordination():
     try:
@@ -49,6 +52,11 @@ def testCoordination():
     testForwardCoordination(mh)
     testBackwardCoordination(mh)
 
+    # Clean up GPIO
+    mh.cleanup()
+
+    print("Coordindation testing COMPLETE!")
+
 
 def testBrakes():
     try:
@@ -63,6 +71,16 @@ def testBrakes():
     print("*     Brake Testing     *")
     print("*************************")
 
+    testM1Brake(mh)
+    testM2Brake(mh)
+    testM1M2Brake(mh)
+
+    # Clean up GPIO
+    mh.cleanup()
+
+    print("Brake testing COMPLETE!")
+
+    
     
 
 ########################################
@@ -238,8 +256,30 @@ def testM1Brake(mh):
     time.sleep(3)    
     
 
+def testM1Brake(mh):
+    """
+        Test that the brake code works (not normally used)
+    """
+    
+    print(" [ F O R W A R D S ] ")
+
+    percent = 80
+    mh.setSpeeds(80*4, 80*4)
+
+    print("speed: {0}%".format(round(percent,2)))
+    time.sleep(3)
+
+    print(" [ A P P L Y I N G   B R A K E ] ")
+    time.sleep(1)
+
+    mh.setBrakes(100,100)
+    
+    print("SLEEPING FOR 3 SECONDS")
+    time.sleep(3)
+
+    
 
 def __name__():
     basic()
 
-testCoordination()
+testBrakes()
