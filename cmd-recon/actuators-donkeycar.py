@@ -318,11 +318,8 @@ class Pololu:
     '''
     def __init__(self):
         from Pololu_VNH5019 import Pololu_DualVNH5019Shield
-        import Adafruit_GPIO as GPIO
-        import Adafruit_GPIO.PWM as PWM
 
-        self.mh = Pololu_DualVNH5019Shield(gpio=GPIO.get_platform_gpio(),
-                                           pwm=PWM.get_platform_pwm())
+        self.mh = Pololu_DualVNH5019Shield()
 
         self.speed = 0
         self.throttleL = 0
@@ -363,6 +360,7 @@ class Pololu:
 
     def shutdown(self):
         self.mh.setBrakes(0)
+        self.mh.cleanup()
 
 
     def convert(self, value):
