@@ -51,7 +51,19 @@ def testCoordination():
 
 
 def testBrakes():
-    pass
+    try:
+        import Pololu_VNH5019 as VNH
+    except:
+        print("Error: cannot import driver!")
+        return
+
+    mh = VNH.Pololu_DualVNH5019Shield()
+
+    print("*************************")
+    print("*     Brake Testing     *")
+    print("*************************")
+
+    
 
 ########################################
 ##      UNIT TESTS (BY PART)          ##   
@@ -183,7 +195,47 @@ def testBackwardCoordination(mh):
     print("SLEEPING FOR 3 SECONDS")
     time.sleep(3)
             
+def testM1Brake(mh):
+    """
+        Test that the brake code works (not normally used)
+    """
+    
+    print(" [ F O R W A R D S ] ")
 
+    percent = 80
+    mh.setM1Speed(80*4)
+
+    print("speed: {0}%".format(round(percent,2)))
+    time.sleep(3)
+
+    print(" [ A P P L Y I N G   B R A K E ] ")
+    time.sleep(1)
+
+    mh.setM1Brake(100)
+    
+    print("SLEEPING FOR 3 SECONDS")
+    time.sleep(3)
+
+def testM1Brake(mh):
+    """
+        Test that the brake code works (not normally used)
+    """
+    
+    print(" [ F O R W A R D S ] ")
+
+    percent = 80
+    mh.setM2Speed(80*4)
+
+    print("speed: {0}%".format(round(percent,2)))
+    time.sleep(3)
+
+    print(" [ A P P L Y I N G   B R A K E ] ")
+    time.sleep(1)
+
+    mh.setM2Brake(100)
+    
+    print("SLEEPING FOR 3 SECONDS")
+    time.sleep(3)    
     
 
 
