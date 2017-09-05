@@ -234,7 +234,7 @@ def testM1Brake(mh):
     print("SLEEPING FOR 3 SECONDS")
     time.sleep(3)
 
-def testM1Brake(mh):
+def testM2Brake(mh):
     """
         Test that the brake code works (not normally used)
     """
@@ -256,7 +256,7 @@ def testM1Brake(mh):
     time.sleep(3)    
     
 
-def testM1Brake(mh):
+def testM1M2Brake(mh):
     """
         Test that the brake code works (not normally used)
     """
