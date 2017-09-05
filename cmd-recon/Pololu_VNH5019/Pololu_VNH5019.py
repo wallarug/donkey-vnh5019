@@ -55,11 +55,11 @@ class Pololu_VNH5019(object):
 
         # Setup all pins as outputs
         for pin in (ina, inb, enable):
-            gpio.setup(pin, GPIO.OUT)
+            self._gpio.setup(pin, GPIO.OUT)
 
         # Setup the PWM speed control
         if ( enable_pwm ):
-            pwm.start(ctrl, 0)
+            self._pwm.start(ctrl, 0)
         else:
             gpio.setup(ctrl, GPIO.OUT)
             self._gpio.output(ctrl, False)
