@@ -321,7 +321,8 @@ class Pololu:
         import Adafruit_GPIO as GPIO
         import Adafruit_GPIO.PWM as PWM
 
-        self.mh = Pololu_DualVNH5019Shield(gpio=GPIO, pwm=PWM)
+        self.mh = Pololu_DualVNH5019Shield(gpio=GPIO.get_platform_gpio(),
+                                           pwm=PWM.get_platform_pwm())
 
         self.speed = 0
         self.throttleL = 0
