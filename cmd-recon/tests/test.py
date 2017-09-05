@@ -8,7 +8,13 @@
 
 import time
 
-def basic():
+
+
+
+#
+#   TEST GROUPS 
+#
+def testBasic():
     try:
         import Pololu_VNH5019 as VNH
     except:
@@ -17,7 +23,41 @@ def basic():
 
     mh = VNH.Pololu_DualVNH5019Shield()
 
+    print("*************************")
+    print("* Basic Motor Testings  *")
+    print("*************************")
 
+    testM1Basic(mh)
+    testM2Basic(mh)
+
+    
+    print("Basic testing complete!")
+
+def testCoordination():
+    try:
+        import Pololu_VNH5019 as VNH
+    except:
+        print("Error: cannot import driver!")
+        return
+
+    mh = VNH.Pololu_DualVNH5019Shield()
+
+    print("*************************")
+    print("* Coordindation Testing *")
+    print("*************************")
+
+    testForwardCoordination(mh)
+    testBackwardCoordination(mh)
+
+
+def testBrakes():
+    pass
+
+########################################
+##      UNIT TESTS (BY PART)          ##   
+########################################
+
+def testM1Basic(mh):
     ##
     ##  M1 Tests - Direction, Speed
     ##
@@ -55,6 +95,7 @@ def basic():
     time.sleep(3)
 
 
+def testM2Basic(mh):
     ##
     ##  M2 Tests - Direction, Speed
     ##
@@ -90,12 +131,63 @@ def basic():
     print("[speed stop]")
     mh.setM2Speed(0)
     time.sleep(3)
+
+def testForwardCoordination(mh):
+    """
+        Test that both motors move in same direction
+    """
+    
+    print(" [ F O R W A R D S ] ")
+
+    percent = 0
+    for i in range(400):
+        mh.setSpeeds(i, i)
+        percent = i / 4
+        print("speed: {0}%".format(round(percent,2)))
+        time.sleep(0.05)
+
+    time.sleep(3)
+
+    for i in range(400, 0, -1):
+        mh.setSpeeds(i, i)
+        percent = i / 4
+        print("speed: {0}%".format(round(percent,2)))
+        time.sleep(0.05)
+
+    print("SLEEPING FOR 3 SECONDS")
+    time.sleep(3)
+
+
+def testBackwardCoordination(mh):
+    """
+        Test that both motors move in same direction
+    """
+    
+    print(" [ B A C K W A R D S] ")
+
+    percent = 0
+    for i in range(0, -400, -1):
+        mh.setSpeeds(i, i)
+        percent = i / 4
+        print("speed: {0}%".format(round(percent,2)))
+        time.sleep(0.05)
+
+    time.sleep(3)
+
+    for i in range(-400, 0, 1):
+        mh.setSpeeds(i, i)
+        percent = i / 4
+        print("speed: {0}%".format(round(percent,2)))
+        time.sleep(0.05)
+
+    print("SLEEPING FOR 3 SECONDS")
+    time.sleep(3)
+            
+
     
 
-    print("Basic testing complete!")
 
+def __name__():
+    basic()
 
-def brake():
-    pass    
-    
-    
+testCoordination()
