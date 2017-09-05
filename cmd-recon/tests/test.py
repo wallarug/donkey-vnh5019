@@ -281,7 +281,7 @@ def testM1M2Brake(mh):
 
 if __name__ == '__main__':
     # parse commandline args:
-    args = getopts(argv)
+    args = sys.argv
 
     # select which test(s) to run
     if 'basic' in args:
