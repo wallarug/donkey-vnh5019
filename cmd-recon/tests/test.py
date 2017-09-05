@@ -7,7 +7,7 @@
 #  Updated: 05/09/2017
 
 import time
-
+import sys
 
 
 
@@ -279,7 +279,19 @@ def testM1M2Brake(mh):
 
     
 
-def __name__():
-    basic()
+if __name__ == '__main__':
+    # parse commandline args:
+    args = getopts(argv)
 
-testBrakes()
+    # select which test(s) to run
+    if 'basic' in args:
+        testBasic()
+
+    if 'brake' in args:
+        testBrakes()
+
+    if 'coordination' in args:
+        testCoordination()
+
+    print("script closed!")
+
