@@ -64,6 +64,9 @@ class Pololu_VNH5019(object):
             gpio.setup(ctrl, GPIO.OUT)
             self._gpio.output(ctrl, False)
 
+        # Enable Motor
+        self._gpio.output(self._en, True)
+
         # Initialise the motor (stationary)
         self.setBrake(0)
 
