@@ -14,14 +14,14 @@ This project relays on the Pololu Dual VNH5019 Motor Driver Shield.  It will be 
 
 | Arduino | VNH5019 | BCM GPIO |
 |---------|---------|----------|
-|  D2     | M1 INA  |     5    |
-|  D4     | M1 INB  |     4    |
-|  D6     | M1 EN   |     6    |
-|  D7     | M2 INA  |     17   |
-|  D8     | M2 INB  |     18   |
-|  D9     | M1 PWM  |     19   |
-|  D10    | M2 PWM  |     20   |
-|  D12    | M2 EN   |     22   |
+|  D2     | M1 INA  |     17    |
+|  D4     | M1 INB  |     27    |
+|  D6     | M1 EN   |     23    |
+|  D7     | M2 INA  |     5   |
+|  D8     | M2 INB  |     6   |
+|  D9     | M1 PWM  |     22   |
+|  D10    | M2 PWM  |     13   |
+|  D12    | M2 EN   |     24   |
 |  A0     | M1 CS   |     nc   |
 |  A1     | M2 CS   |     nc   |
 
